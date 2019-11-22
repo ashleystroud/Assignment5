@@ -7,11 +7,29 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
 library(janitor)
 
+
+mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
+  clean_names()
+```
+
+
+<br>
+
+###Introduction
+
+
+
+<br>
+
+###Data and Methods
+
+
+```{r}
 
 ```
 
