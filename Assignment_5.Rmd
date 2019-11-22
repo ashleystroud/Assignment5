@@ -13,6 +13,7 @@ library(tidyverse)
 library(janitor) # for clean names function
 library(directlabels) # for direct labels on line graph
 library(kableExtra) # to create table
+library(effsize)
 
 mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
   clean_names()
