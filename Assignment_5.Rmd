@@ -1,0 +1,17 @@
+---
+title: "Pacific giant salamanders (Dicamptodon tenebrosus) in Mack Creek (near Blue River, Oregon): Size and channel location in old growth and previously clear cut forest sections"
+subtitle: "ESM 206 Assignment 5"
+author: "Kaitlyn Lanfield and Ashley Stroud"
+date: "Due: Decemeber 4, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(janitor)
+
+
+```
+
