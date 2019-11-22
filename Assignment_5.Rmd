@@ -10,11 +10,13 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
-library(janitor)
-
+library(janitor) # for clean names function
+library(directlabels) # for direct labels on line graph
+library(kableExtra) # to create table
 
 mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
   clean_names()
+
 ```
 
 
@@ -30,6 +32,10 @@ mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>%
 
 
 ```{r}
+
+
+
+
 
 ```
 
