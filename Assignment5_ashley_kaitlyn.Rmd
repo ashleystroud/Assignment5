@@ -15,6 +15,7 @@ library(directlabels) # for direct labels on line graph
 library(kableExtra) # to create table
 library(effsize)
 library(ggbeeswarm)
+library(car)
 
 #original dataframe
 mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
@@ -188,8 +189,43 @@ ps_2017_channel_plot <- ggplot() +
                 aes(x = channel_type, 
                     ymin = mean_weight - se_weight,
                     ymax = mean_weight + se_weight),
-                width = 0.1)
+                width = 0.1) +
+  coord_flip()
 
 ps_2017_channel_plot
+
+
+
+
 ```
+
+
+```{r}
+#Levene's test (hypothesis test for equal variance):
+
+leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
+
+#H0: variances are equals, there is no difference in variance 
+#HA: variances are not equal, there is a difference in variance
+
+# given that p greater than 0.05, we retain the null that variances are equal or not sig different, so we can proceed with an anova which has the assumption that variances are equal 
+
+ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
+summary(ps_aov)
+# here we see that it is sig, so move forward with tukeys, also need to comment the p value here
+
+
+
+```
+
+
+
+
+
+
+####Questions
+-how does this beeswarm work for a visualization, especially since we inverted it
+-what would be an example of using confidence interval
+-im confused how we get standard error when we dont know the pop sd? or do we? 
+-
 
