@@ -14,6 +14,7 @@ library(janitor) # for clean names function
 library(directlabels) # for direct labels on line graph
 library(kableExtra) # to create table
 library(effsize)
+library(ggbeeswarm)
 
 #original dataframe
 mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
@@ -156,4 +157,39 @@ ggplot(ps_2017_channel_weight, aes(x = weight)) +
 
 
 
+```{r}
+
+ps_2017_channel_summary <- ps_2017_channel_weight %>% 
+  group_by(channel_type) %>% 
+  summarise(
+    sample_size = n(),
+    mean_weight = mean(weight),
+    sd_weight = sd(weight),
+    se_weight = sd(weight)/ sqrt(n())
+    )
+ps_2017_channel_summary
+
+```
+
+
+```{r}
+
+
+
+ps_2017_channel_plot <- ggplot() +
+  geom_beeswarm(data = ps_2017_channel_weight, 
+                aes(x = channel_type, y = weight), 
+                size = 1,
+                alpha = 0.6,
+                color = "gray60") +
+  geom_point(data = ps_2017_channel_summary, 
+             aes(x = channel_type, y = mean_weight)) +
+  geom_errorbar(data = ps_2017_channel_summary,
+                aes(x = channel_type, 
+                    ymin = mean_weight - se_weight,
+                    ymax = mean_weight + se_weight),
+                width = 0.1)
+
+ps_2017_channel_plot
+```
 
