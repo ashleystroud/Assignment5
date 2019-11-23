@@ -1,0 +1,151 @@
+---
+title: "Kaitlyn's Markdown"
+author: "KL"
+date: "11/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE )
+
+#Load packages
+library(tidyverse)
+library(janitor) # for clean names function
+library(directlabels) # for direct labels on line graph
+library(kableExtra) # to create table
+library(effsize)
+library(ggbeeswarm)
+library(car)
+
+#Read in original data 
+mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
+  clean_names()
+
+#Create a dataframe that only includes observations for salamanders
+pacific_salamander <- mack_creek_vertebrates_og %>% 
+  filter(species == "DITE") %>% 
+  mutate(forest_type = case_when(section == "CC" ~ "Clear cut",
+                                 section == "OG" ~ "Old growth"),
+         channel_type = case_when(unittype == "C" ~ "Cascade",
+                                  unittype == "P" ~ "Pool",
+                                  unittype == "SC" ~ "Side-channel"))
+
+```
+
+```{r}
+pacific_salamander_count <- pacific_salamander %>% 
+  count(year, forest_type, name = "count")
+
+
+years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count )) +
+  geom_line(aes(color = forest_type))
+  
+
+years_growth_plot
+  
+```
+
+```{r}
+ps_2017_channel_count <- pacific_salamander %>% 
+  filter(year == "2017") %>% 
+  count(channel_type, forest_type, name = "count") %>%
+  na.omit()
+
+ps_2017_channel_table <- ps_2017_channel_count %>% 
+  pivot_wider(names_from = channel_type, values_from = count)
+
+ps_2017_channel_props <- ps_2017_channel_table %>% 
+  adorn_percentages(denominator = "row") %>% 
+  adorn_pct_formatting(digits = 1) %>% 
+  adorn_ns(position = "front") %>% 
+  kable() %>% 
+  kable_styling()
+
+ps_2017_channel_props
+
+```
+```{r}
+#we need to select out the forest_type column so we can have a contingency table to perform a chi sq test.
+
+chi_ps_2017_channel_count <- ps_2017_channel_table %>% 
+  select(- forest_type)
+
+
+chi_test_ps_2017_channel <- chisq.test(chi_ps_2017_channel_count)
+chi_test_ps_2017_channel
+```
+```{r}
+
+ps_2017_weight <- pacific_salamander %>% 
+  filter(year == "2017") %>%
+  select(year,forest_type, channel_type, weight)
+
+ggplot(ps_2017_weight, aes(x = weight))+
+  geom_histogram(aes(fill = forest_type))
+
+#even though we see outliers and the distributions are not normal, because we have such high sample sizes we can use the central limit theorum to assume normality for our t-test
+
+cc_weight <- ps_2017_weight %>% 
+  filter(forest_type == "Clear cut")
+
+og_weight <- ps_2017_weight %>% 
+  filter(forest_type == "Old growth")
+
+ps_weight_ttest <- t.test(cc_weight$weight, og_weight$weight)
+ps_weight_ttest
+
+#there is no significant difference in mean salamander weights in 2017 between clear cut forests and old growth forests
+
+```
+```{r}
+
+ps_2017_channel_weight <- ps_2017_weight %>%
+  select(year, channel_type, weight) %>% 
+  na.omit()
+
+ggplot(ps_2017_channel_weight, aes(x = weight)) +
+  geom_histogram(aes (fill = channel_type)) +
+  facet_wrap(~ channel_type)
+```
+```{r}
+ps_2017_channel_summary <- ps_2017_channel_weight %>%
+  group_by(channel_type) %>% 
+  summarize(
+    sample_size = n(),
+    mean_weight = mean(weight),
+    sd_weight = sd(weight),
+    se_weight = sd(weight)/sqrt(n())
+    )
+ps_2017_channel_summary
+```
+
+
+```{r}
+ps_2017_channel_plot <- ggplot() +
+  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight), size = 0.8, alpha = 0.6, color = "light blue") +
+  geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight))+
+  geom_errorbar(data = ps_2017_channel_summary, aes(x = channel_type,
+                                                    ymin = mean_weight - se_weight,
+                                                    ymax = mean_weight + se_weight),
+                width = 0.1) +
+  coord_flip()
+ps_2017_channel_plot
+
+```
+
+```{r}
+leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
+#Null : variances are equal
+#Alternative : variances are not equal
+#Given that p > 0.05 we retain the null that variances are equal so we can proceed with an ANOVA
+
+ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
+summary(ps_aov)
+
+TukeyHSD(ps_aov)
+
+# there is a significant difference between salamander weights in side channels and pools. 
+
+
+```
+
