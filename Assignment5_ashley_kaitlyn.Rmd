@@ -214,7 +214,8 @@ ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
 summary(ps_aov)
 # here we see that it is sig, so move forward with tukeys, also need to comment the p value here
 
-
+TukeyHSD(ps_aov)
+# only sig is side channel to the pool
 
 ```
 
@@ -227,5 +228,5 @@ summary(ps_aov)
 -how does this beeswarm work for a visualization, especially since we inverted it
 -what would be an example of using confidence interval
 -im confused how we get standard error when we dont know the pop sd? or do we? 
--
+-effect size w annova, not f distribution 
 
