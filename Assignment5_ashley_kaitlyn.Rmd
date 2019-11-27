@@ -46,7 +46,7 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 ###Data and Methods
 
 ####Results A: Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
-```{r}
+```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
 
 #pacific salamander counts df
 pacific_salamander_count <- pacific_salamander %>% 
