@@ -148,4 +148,7 @@ TukeyHSD(ps_aov)
 
 
 ```
-
+-how does this beeswarm work for a visualization, especially since we inverted it
+-what would be an example of using confidence interval
+-im confused how we get standard error when we dont know the pop sd? or do we? 
+-effect size w annova, not f distribution 
