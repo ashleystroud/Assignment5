@@ -217,8 +217,51 @@ summary(ps_aov)
 TukeyHSD(ps_aov)
 # only sig is side channel to the pool
 
+#This creates a summary of all the outputs from our ANOVA so we can reference it 
+
+ps_aov_outputs <- unlist(summary(ps_aov))
+ps_aov_outputs
+
 ```
 
+```{r}
+# Now we want to do effect sizes on each of the populations regardless of their significant differences
+
+#Here we will split them each into different dataframes
+
+cascade_weight <- ps_2017_channel_weight %>% 
+  filter(channel_type == "Cascade")
+
+pool_weight <- ps_2017_channel_weight %>%
+  filter(channel_type == "Pool")
+
+side_channel_weight <- ps_2017_channel_weight %>%
+  filter(channel_type == "Side-channel")
+
+#Here we will test the effect sizes of each channel type interactions
+
+#Effect size of cascade salamander weights and pool salamander weights
+
+cascade_pool_ef <- effsize::cohen.d(cascade_weight$weight, pool_weight$weight)
+cascade_pool_ef
+
+#Effect size is negligible which is not surprising because the difference was insignificant in our Tukey's HSD
+
+#Effect size of side_channel salamander weights and cascade salamander weights
+
+cascade_side_channel_ef <- effsize::cohen.d(cascade_weight$weight, side_channel_weight$weight)
+cascade_side_channel_ef
+
+#Effect size is small
+
+#Effect size of side_channel salamander weights and pool salamander weights
+
+pool_side_channel_ef <- effsize::cohen.d(pool_weight$weight, side_channel_weight$weight)
+pool_side_channel_ef
+
+#Effect size is small
+
+```
 
 
 
