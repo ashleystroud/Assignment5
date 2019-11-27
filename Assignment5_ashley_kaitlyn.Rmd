@@ -1,0 +1,232 @@
+---
+title: "Pacific giant salamanders (Dicamptodon tenebrosus) in Mack Creek (near Blue River, Oregon): Size and channel location in old growth and previously clear cut forest sections"
+subtitle: "ESM 206 Assignment 5"
+author: "Kaitlyn Lanfield and Ashley Stroud"
+date: "Due: Decemeber 4, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(janitor) # for clean names function
+library(directlabels) # for direct labels on line graph
+library(kableExtra) # to create table
+library(effsize)
+library(ggbeeswarm)
+library(car)
+
+#original dataframe
+mack_creek_vertebrates_og <- read_csv("mack_creek_vertebrates.csv") %>% 
+  clean_names()
+
+#pacific salamander only DF
+pacific_salamander <- mack_creek_vertebrates_og %>% 
+  filter(species == "DITE") %>% 
+  mutate(forest_type = case_when(section == "CC" ~ "Clear cut",
+                                 section == "OG" ~ "Old growth" )) %>%
+  mutate(channel_type = case_when(unittype == "C" ~ "Cascade",
+                                  unittype == "P" ~ "Pool",
+                                  unittype == "SC" ~ "Side channel"))
+  
+  
+
+```
+
+
+<br>
+
+###Introduction
+
+
+
+<br>
+
+###Data and Methods
+
+####Results A: Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
+```{r}
+
+#pacific salamander counts df
+pacific_salamander_count <- pacific_salamander %>% 
+  count(year, forest_type, name = "count")
+
+#plot 
+years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count)) +
+  geom_line(aes(color = forest_type)) +
+  geom_point()
+
+years_growth_plot
+
+#we can see that they are generally the same trend, many of the years clear cut is less, but overall trending in numbers other than that steep decline
+
+```
+
+
+####Results B: Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+```{r}
+
+#ps is for pacific salamander
+ps_2017_channel_count <- pacific_salamander %>% 
+  filter(year == "2017") %>% 
+  count(channel_type, forest_type, name = "count") %>% 
+  na.omit()
+
+# create table
+ps_2017_channel_table <- ps_2017_channel_count %>% 
+  pivot_wider(names_from = channel_type, values_from = count) 
+
+
+ps_2017_channel_props <- ps_2017_channel_table %>% #wide format table 
+  adorn_percentages(denominator = "row") %>%
+  adorn_pct_formatting(digits = 1) %>% 
+  adorn_ns(position = "front") %>% #if i convert to proportins lose sample sixze, so add back in with n's, and put in front 
+  kable() %>% 
+  kable_styling()
+
+ps_2017_channel_props
+
+
+
+```
+
+####Results C: Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
+```{r}
+# Make this a contingency table that **only contains the actual counts** to perform chi sqaure
+
+chi_ps_2017_channel_count <- ps_2017_channel_table %>% 
+  select(-forest_type)
+
+chi_ps_2017_channel_count
+
+chi_test_ps_2017_channel <- chisq.test(chi_ps_2017_channel_count)
+chi_test_ps_2017_channel
+
+```
+
+
+####Results D. Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
+```{r}
+colnames(pacific_salamander)
+ps_2017_weight <- pacific_salamander %>% 
+  filter(year == "2017") %>% 
+  select(year, forest_type, channel_type, weight)
+
+#exploratory data viz
+
+ggplot(ps_2017_weight, aes(x = weight)) +
+  geom_histogram(aes(fill = forest_type))
+
+#even though we see outliers and the distribution are not normal, bc we have such high sample sizes we can use the central limit theorem
+
+
+```
+
+
+```{r}
+#t-tests
+
+cc_weight <- ps_2017_weight %>% 
+  filter(forest_type == "Clear cut")
+
+og_weight <- ps_2017_weight %>% 
+  filter(forest_type == "Old growth")
+
+ps_weight_ttest <- t.test(cc_weight$weight, og_weight$weight)
+ps_weight_ttest
+
+# there is not a sig diff between mean salamnder weights in 2017 between clear cut and old growth 
+
+```
+
+
+####Results E. Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+```{r}
+ps_2017_channel_weight <- ps_2017_weight %>% 
+  select(year, channel_type, weight) %>% 
+  na.omit()
+
+#visual exploration
+ggplot(ps_2017_channel_weight, aes(x = weight)) +
+  geom_histogram(aes(fill = channel_type)) +
+  facet_wrap(~channel_type)
+# here we see positively skewed data, outliers, while means could be used due to CLT, it would not be the most appropriate representation of central tendency 
+
+```
+
+
+
+
+```{r}
+
+ps_2017_channel_summary <- ps_2017_channel_weight %>% 
+  group_by(channel_type) %>% 
+  summarise(
+    sample_size = n(),
+    mean_weight = mean(weight),
+    sd_weight = sd(weight),
+    se_weight = sd(weight)/ sqrt(n())
+    )
+ps_2017_channel_summary
+
+```
+
+
+```{r}
+
+
+
+ps_2017_channel_plot <- ggplot() +
+  geom_beeswarm(data = ps_2017_channel_weight, 
+                aes(x = channel_type, y = weight), 
+                size = 1,
+                alpha = 0.6,
+                color = "gray60") +
+  geom_point(data = ps_2017_channel_summary, 
+             aes(x = channel_type, y = mean_weight)) +
+  geom_errorbar(data = ps_2017_channel_summary,
+                aes(x = channel_type, 
+                    ymin = mean_weight - se_weight,
+                    ymax = mean_weight + se_weight),
+                width = 0.1) +
+  coord_flip()
+
+ps_2017_channel_plot
+
+
+
+
+```
+
+
+```{r}
+#Levene's test (hypothesis test for equal variance):
+
+leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
+
+#H0: variances are equals, there is no difference in variance 
+#HA: variances are not equal, there is a difference in variance
+
+# given that p greater than 0.05, we retain the null that variances are equal or not sig different, so we can proceed with an anova which has the assumption that variances are equal 
+
+ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
+summary(ps_aov)
+# here we see that it is sig, so move forward with tukeys, also need to comment the p value here
+
+TukeyHSD(ps_aov)
+# only sig is side channel to the pool
+
+```
+
+
+
+
+
+
+####Questions
+-how does this beeswarm work for a visualization, especially since we inverted it
+-what would be an example of using confidence interval
+-im confused how we get standard error when we dont know the pop sd? or do we? 
+-effect size w annova, not f distribution 
+
