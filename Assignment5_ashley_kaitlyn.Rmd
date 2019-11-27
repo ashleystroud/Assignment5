@@ -55,9 +55,16 @@ pacific_salamander_count <- pacific_salamander %>%
 #plot 
 years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count)) +
   geom_line(aes(color = forest_type)) +
-  geom_point()
+  geom_point() +
+  scale_x_continuous(limits = c(1993, 2017), expand = c(0,0), breaks = seq(0, 2017, 5)) +
+  scale_y_continuous(limits = c(0, 400), expand = c(0,0), breaks = seq(0, 380, 50)) +
+  scale_color_manual(values = c("green", "forestgreen"), labels = c("Clear cut", "Old growth")) +
+  labs(x = "Year",
+       y = "Abundance",
+       color = "Forest type")
 
 years_growth_plot
+
 
 #we can see that they are generally the same trend, many of the years clear cut is less, but overall trending in numbers other than that steep decline
 
