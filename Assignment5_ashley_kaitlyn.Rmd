@@ -45,7 +45,9 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 
 ###Data and Methods
 
-####Results A: Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
+####A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
+Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017. While the two salamander populations share a similar trend of incline and decline in counts throughout the years, the counts of salamanders in clear cut forests are generally lower than those inhabiting old growth forests. Interestingly, this trend switched in 2014 (Figure 3.). 
+
 ```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
 
 #pacific salamander counts df
@@ -61,7 +63,8 @@ years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count)) 
   scale_color_manual(values = c("green", "forestgreen"), labels = c("Clear cut", "Old growth")) +
   labs(x = "Year",
        y = "Abundance",
-       color = "Forest type")
+       color = "Forest type")+
+  theme_minimal()
 
 years_growth_plot
 
