@@ -88,15 +88,15 @@ ps_2017_channel_table <- ps_2017_channel_count %>%
   pivot_wider(names_from = channel_type, values_from = count) 
 
 
-ps_2017_channel_props <- ps_2017_channel_table %>% #wide format table 
-  adorn_percentages(denominator = "row") %>%
+ps_2017_channel_props <- ps_2017_channel_table %>% 
+  adorn_percentages(denominator = "row") %>% 
   adorn_pct_formatting(digits = 1) %>% 
-  adorn_ns(position = "front") %>% #if i convert to proportins lose sample sixze, so add back in with n's, and put in front 
-  kable() %>% 
-  kable_styling()
+  adorn_ns(position = "front") %>% 
+  kable(col.names = c("Forest type", "Cascade", "Pool", "Side-channel")) %>% 
+  kable_styling() %>% 
+  add_header_above(c("Channel type " = 4))
 
 ps_2017_channel_props
-
 
 
 ```
@@ -115,6 +115,7 @@ chi_test_ps_2017_channel
 
 ```
 
+There is no significant effect of forest type (clear cut/old growth) on where in the channel (cascade/pool/side-channel) pacific salamanders are found. ($\chi$^2^(`r chi_test_ps_2017_channel$parameter`) = `r round(chi_test_ps_2017_channel$statistic,2)`, *p* = `r round(chi_test_ps_2017_channel$p.value, 2)`). The percentage of salamanders found in cascades and side-channels differed by less than 5% between clear cut and old growth forests. Percentages of salamanders found in pools differed slightly more, but still by less than 10%. 
 
 ####Results D. Mean weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. or effects of forest type on salamander weight??
 ```{r}
@@ -199,21 +200,21 @@ ps_2017_channel_summary
 
 
 ps_2017_channel_plot <- ggplot() +
-  geom_beeswarm(data = ps_2017_channel_weight, 
-                aes(x = channel_type, y = weight), 
-                size = 1,
-                alpha = 0.6,
-                color = "gray60") +
-  geom_point(data = ps_2017_channel_summary, 
-             aes(x = channel_type, y = mean_weight)) +
-  geom_errorbar(data = ps_2017_channel_summary,
-                aes(x = channel_type, 
-                    ymin = mean_weight - se_weight,
-                    ymax = mean_weight + se_weight),
-                width = 0.1) +
+  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 1, alpha = 0.6) +
+  scale_y_continuous(limits = c(0, 105), expand = c(0,0), breaks = seq(0, 100, 25))+
+  theme_minimal()+
+  geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight), size = 0.8)+
+  geom_errorbar(data = ps_2017_channel_summary, aes(x = channel_type,
+                                                    ymin = mean_weight - se_weight,
+                                                    ymax = mean_weight + se_weight),
+                width = 0.1)+
+  theme(legend.position = "none") +
+  theme(axis.title.y = element_blank())+
+  labs(y = "Pacific salamander weight(g)")+
   coord_flip()
 
 ps_2017_channel_plot
+
 
 
 
