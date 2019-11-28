@@ -58,10 +58,13 @@ ps_2017_channel_props <- ps_2017_channel_table %>%
   adorn_percentages(denominator = "row") %>% 
   adorn_pct_formatting(digits = 1) %>% 
   adorn_ns(position = "front") %>% 
-  kable() %>% 
-  kable_styling()
+  kable(col.names = c("Forest type", "Cascade", "Pool", "Side-channel")) %>% 
+  kable_styling() %>% 
+  add_header_above(c("Channel type " = 4))
 
 ps_2017_channel_props
+
+#Table 1. Counts and proportions of pacific salamanders in clear cut and old growth forests across channel types. Proportions are expressed for each channel type as a percentage of the total pacific salamander population per forest type.  
 
 ```
 ```{r}
@@ -74,6 +77,8 @@ chi_ps_2017_channel_count <- ps_2017_channel_table %>%
 chi_test_ps_2017_channel <- chisq.test(chi_ps_2017_channel_count)
 chi_test_ps_2017_channel
 ```
+There is no significant effect of forest type (clear cut/old growth) on where in the channel (cascade/pool/side-channel) pacific salamanders are found. ($\chi$^2^(`r chi_test_ps_2017_channel$parameter`) = `r round(chi_test_ps_2017_channel$statistic,2)`, *p* = `r round(chi_test_ps_2017_channel$p.value, 2)`). The percentage of salamanders found in cascades and side-channels differed by less than 5% between clear cut and old growth forests. Percentages of salamanders found in pools differed slightly more, but still by less than 10%.  
+
 ```{r}
 
 ps_2017_weight <- pacific_salamander %>% 
@@ -122,12 +127,15 @@ ps_2017_channel_summary
 
 ```{r}
 ps_2017_channel_plot <- ggplot() +
-  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight), size = 0.8, alpha = 0.6, color = "light blue") +
+  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 0.8, alpha = 0.6, dodge.width = 0.2) +
+  scale_y_continuous(limits = c(0, 100), expand = c(0,0), breaks = seq(0, 100, 25))+
+  theme_minimal()+
   geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight))+
   geom_errorbar(data = ps_2017_channel_summary, aes(x = channel_type,
                                                     ymin = mean_weight - se_weight,
                                                     ymax = mean_weight + se_weight),
-                width = 0.1) +
+                width = 0.1)+
+  
   coord_flip()
 ps_2017_channel_plot
 
@@ -142,12 +150,56 @@ leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
 ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
 summary(ps_aov)
 
+ps_aov_outputs <- unlist(summary(ps_aov))
+ps_aov_outputs
+
 TukeyHSD(ps_aov)
 
 # there is a significant difference between salamander weights in side channels and pools. 
 
 
 ```
+```{r}
+# Now we want to do effect sizes on each of the populations regardless of their significant differences
+
+#Here we will split them each into different dataframes
+
+cascade_weight <- ps_2017_channel_weight %>% 
+  filter(channel_type == "Cascade")
+
+pool_weight <- ps_2017_channel_weight %>%
+  filter(channel_type == "Pool")
+
+side_channel_weight <- ps_2017_channel_weight %>%
+  filter(channel_type == "Side-channel")
+
+#Here we will test the effect sizes of each channel type interactions
+
+#Effect size of cascade salamander weights and pool salamander weights
+
+cascade_pool_ef <- effsize::cohen.d(cascade_weight$weight, pool_weight$weight)
+cascade_pool_ef
+
+#Effect size is negligible which is not surprising because the difference was insignificant in our Tukey's HSD
+
+#Effect size of side_channel salamander weights and cascade salamander weights
+
+cascade_side_channel_ef <- effsize::cohen.d(cascade_weight$weight, side_channel_weight$weight)
+cascade_side_channel_ef
+
+#Effect size is small
+
+#Effect size of side_channel salamander weights and pool salamander weights
+
+pool_side_channel_ef <- effsize::cohen.d(pool_weight$weight, side_channel_weight$weight)
+pool_side_channel_ef
+
+#Effect size is small
+
+```
+
+
+
 -how does this beeswarm work for a visualization, especially since we inverted it
 -what would be an example of using confidence interval
 -im confused how we get standard error when we dont know the pop sd? or do we? 
