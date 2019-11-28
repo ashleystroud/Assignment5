@@ -37,15 +37,15 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 
 <br>
 
-###Introduction
+### Introduction
 
 
 
 <br>
 
-###Data and Methods
+### Data and Methods
 
-####A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
+#### A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
 Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017. While the two salamander populations share a similar trend of incline and decline in counts throughout the years, the counts of salamanders in clear cut forests are generally lower than those inhabiting old growth forests. Interestingly, this trend switched in 2014 (Figure 3.). 
 
 ```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
@@ -57,7 +57,7 @@ pacific_salamander_count <- pacific_salamander %>%
 #plot 
 years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count)) +
   geom_line(aes(color = forest_type)) +
-  geom_point() +
+  geom_point(aes(color = forest_type)) +
   scale_x_continuous(limits = c(1993, 2017), expand = c(0,0), breaks = seq(0, 2017, 5)) +
   scale_y_continuous(limits = c(0, 400), expand = c(0,0), breaks = seq(0, 380, 50)) +
   scale_color_manual(values = c("green", "forestgreen"), labels = c("Clear cut", "Old growth")) +
@@ -74,7 +74,7 @@ years_growth_plot
 ```
 
 
-####Results B: Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+#### Results B: Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
 ```{r}
 
 #ps is for pacific salamander
@@ -101,7 +101,7 @@ ps_2017_channel_props
 
 ```
 
-####Results C: Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
+#### Results C: Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)?
 ```{r}
 # Make this a contingency table that **only contains the actual counts** to perform chi sqaure
 
@@ -117,7 +117,7 @@ chi_test_ps_2017_channel
 
 There is no significant effect of forest type (clear cut/old growth) on where in the channel (cascade/pool/side-channel) pacific salamanders are found. ($\chi$^2^(`r chi_test_ps_2017_channel$parameter`) = `r round(chi_test_ps_2017_channel$statistic,2)`, *p* = `r round(chi_test_ps_2017_channel$p.value, 2)`). The percentage of salamanders found in cascades and side-channels differed by less than 5% between clear cut and old growth forests. Percentages of salamanders found in pools differed slightly more, but still by less than 10%. 
 
-####Results D. Mean weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. or effects of forest type on salamander weight??
+#### Results D. Mean weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. or effects of forest type on salamander weight??
 ```{r}
 colnames(pacific_salamander)
 ps_2017_weight <- pacific_salamander %>% 
@@ -163,7 +163,7 @@ Weights were compared of pacific giant salamanders in old growth forests to thos
 
 
 
-####Results E. Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+#### Results E. Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 ```{r}
 ps_2017_channel_weight <- ps_2017_weight %>% 
   select(year, channel_type, weight) %>% 
@@ -201,6 +201,7 @@ ps_2017_channel_summary
 
 ps_2017_channel_plot <- ggplot() +
   geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 1, alpha = 0.6) +
+  scale_color_manual(values = c( "#3e64ff","#5edfff","#b2fcff")) +
   scale_y_continuous(limits = c(0, 105), expand = c(0,0), breaks = seq(0, 100, 25))+
   theme_minimal()+
   geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight), size = 0.8)+
@@ -216,7 +217,9 @@ ps_2017_channel_plot <- ggplot() +
 ps_2017_channel_plot
 
 
-
+#2E86C1
+#48C9B0
+#DC7633
 
 
 ```
