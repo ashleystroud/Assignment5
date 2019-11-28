@@ -116,7 +116,7 @@ chi_test_ps_2017_channel
 ```
 
 
-####Results D. Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
+####Results D. Mean weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. or effects of forest type on salamander weight??
 ```{r}
 colnames(pacific_salamander)
 ps_2017_weight <- pacific_salamander %>% 
@@ -133,22 +133,33 @@ ggplot(ps_2017_weight, aes(x = weight)) +
 
 ```
 
-
 ```{r}
-#t-tests
+#we would like compare mean salamander weight in 2017 in clear cut and old growth forests. we first create data fromes for weights in each forest in 2017 only. 
 
+#clear cut 2017 weights dataframe
 cc_weight <- ps_2017_weight %>% 
   filter(forest_type == "Clear cut")
 
+#old growth 2017 weights data frame
 og_weight <- ps_2017_weight %>% 
   filter(forest_type == "Old growth")
 
+#running a t-test and effect size to statisically evaluate the difference in weights
 ps_weight_ttest <- t.test(cc_weight$weight, og_weight$weight)
 ps_weight_ttest
+# t = 1.6669, df = 692.79, p-value = 0.09599, mean of x= 7.77, mean of y = 6.58, not a significant difference using a CI of 5%
+
+#effect size
+ps_weight_eff <- cohen.d(cc_weight$weight, og_weight$weight, na.rm = TRUE)
+ps_weight_eff
+#effect size is negligible
 
 # there is not a sig diff between mean salamnder weights in 2017 between clear cut and old growth 
 
 ```
+Weights were compared of pacific giant salamanders in old growth forests to those in clear cut forests in 2017 only. There was not a significant difference in weights of salamanders between the two forest types (Welch Two Sample t-test, t = `r round(ps_weight_ttest$statistic,2)`, df = `r round(ps_weight_ttest$parameter,2)`, p = `r round (ps_weight_ttest$p.value,3)`).  
+
+
 
 
 ####Results E. Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
