@@ -288,9 +288,10 @@ pool_side_channel_ef
 
 
 
-####Questions
--how does this beeswarm work for a visualization, especially since we inverted it
--what would be an example of using confidence interval
--im confused how we get standard error when we dont know the pop sd? or do we? 
--effect size w annova, not f distribution 
+References
+Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
 
+
+Questions
+-how do we have beeswarm not overlap
+-do we need to write p(0.05) = ??
