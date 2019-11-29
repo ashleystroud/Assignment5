@@ -188,9 +188,12 @@ ps_2017_channel_summary <- ps_2017_channel_weight %>%
     sample_size = n(),
     mean_weight = mean(weight),
     sd_weight = sd(weight),
-    se_weight = sd(weight)/ sqrt(n())
+    se_weight = sd(weight)/ sqrt(n()),
+    var_weight = var(weight)
     )
 ps_2017_channel_summary
+
+#largest variance is 185.58, smallest variance is 68.31, largest is less than 4x, variances are likely close enough
 
 ```
 
