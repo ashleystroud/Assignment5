@@ -181,7 +181,7 @@ ggplot(ps_2017_channel_weight, aes(x = weight)) +
 
 
 ```{r}
-
+# create a summary DF for each of the channel types to be used for plotting  
 ps_2017_channel_summary <- ps_2017_channel_weight %>% 
   group_by(channel_type) %>% 
   summarise(
@@ -229,35 +229,48 @@ ps_2017_channel_plot
 
 
 ```{r}
-#Levene's test (hypothesis test for equal variance):
+#Statistical analysis of weights between the three channel types:
+
+
+#----------------------------Levene's test------------------------------------# 
+#(hypothesis test for equal variance) for the weights of three channel types:
 
 leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
 
 #H0: variances are equals, there is no difference in variance 
 #HA: variances are not equal, there is a difference in variance
 
-# given that p greater than 0.05, we retain the null that variances are equal or not sig different, so we can proceed with an anova which has the assumption that variances are equal 
+# given that p greater than 0.05, we retain the null that variances are equal or not sig different, so we can proceed with an anova which has the assumption that variances are equal. We expected this since we saw that the largest was less than 4x in the summary table df we created. 
+#-------------------------------------------------------------------------------# 
 
+
+#----------------------------ANOVA----------------------------------------------#
 ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
 summary(ps_aov)
 # here we see that it is sig, so move forward with tukeys, also need to comment the p value here
+#-------------------------------------------------------------------------------# 
 
+
+#--------------------------Post-hoc analysis------------------------------------# 
 TukeyHSD(ps_aov)
 # only sig is side channel to the pool
 
-#This creates a summary of all the outputs from our ANOVA so we can reference it 
+#-------------------------------------------------------------------------------# 
 
+
+#-------------------------ANOVA summary----------------------------------------# 
 ps_aov_outputs <- unlist(summary(ps_aov))
-ps_aov_outputs
+ps_aov_outputs #This creates a summary of all the outputs from our ANOVA so we can reference it #-------------------------------------------------------------------------------# 
 
 ```
 
 ```{r}
 # Now we want to do effect sizes on each of the populations regardless of their significant differences
 
-#Here we will split them each into different dataframes
+#----------------------------Channel DF's------------------------------------------
+#Here we will split them each into different dataframes so that we are able to use the dateframe for effsize test
 
-cascade_weight <- ps_2017_channel_weight %>% 
+cascade_weight <- ps_2017_channel_weight %>%  
   filter(channel_type == "Cascade")
 
 pool_weight <- ps_2017_channel_weight %>%
@@ -265,30 +278,30 @@ pool_weight <- ps_2017_channel_weight %>%
 
 side_channel_weight <- ps_2017_channel_weight %>%
   filter(channel_type == "Side-channel")
+#--------------------------------------------------------------------------------
 
+
+#-------------------------------Effect size---------------------------------------
 #Here we will test the effect sizes of each channel type interactions
 
-#Effect size of cascade salamander weights and pool salamander weights
-
+#cascade salamander weights - pool salamander weights
 cascade_pool_ef <- effsize::cohen.d(cascade_weight$weight, pool_weight$weight)
 cascade_pool_ef
-
 #Effect size is negligible which is not surprising because the difference was insignificant in our Tukey's HSD
 
-#Effect size of side_channel salamander weights and cascade salamander weights
 
+#Eside_channel salamander weights -cascade salamander weights
 cascade_side_channel_ef <- effsize::cohen.d(cascade_weight$weight, side_channel_weight$weight)
 cascade_side_channel_ef
-
 #Effect size is small
 
-#Effect size of side_channel salamander weights and pool salamander weights
 
+#side_channel salamander weights - pool salamander weights
 pool_side_channel_ef <- effsize::cohen.d(pool_weight$weight, side_channel_weight$weight)
 pool_side_channel_ef
-
 #Effect size is small
 
+#-------------------------------------------------------------------------------# 
 ```
 
 
@@ -302,3 +315,4 @@ Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews E
 Questions
 -how do we have beeswarm not overlap
 -do we need to write p(0.05) = ??
+-side channel color seems a little light for my eyes
