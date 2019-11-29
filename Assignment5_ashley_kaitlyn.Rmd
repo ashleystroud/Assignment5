@@ -308,7 +308,7 @@ pool_weight <- ps_2017_channel_weight %>%
   filter(channel_type == "Pool")
 
 side_channel_weight <- ps_2017_channel_weight %>%
-  filter(channel_type == "Side-channel")
+  filter(channel_type == "Side channel")
 #--------------------------------------------------------------------------------
 
 
@@ -334,8 +334,7 @@ pool_side_channel_ef
 
 #-------------------------------------------------------------------------------# 
 ```
-Mean weights (g) differed significantly only between side channel and pool (one-way ANOVA with post-hoc Tukey's HSD, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`).
-
+Mean salamander weights (g) differed significantly between side channel and pool only (one-way ANOVA with post-hoc Tukey's HSD, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pairwise combinations. It is important to observe the positive skew for each distribution due to outliers as well as the difference in sample sizes (Figure ??). 
 
 
 
@@ -350,3 +349,5 @@ Questions
 -not quite sure what to make of qq plot, and a little confused about negative...
 -can we confirm this statement is true, confusing myself with clt "here we see positively skewed data, outliers, while means could be used due to CLT, it would not be the most appropriate representation of central tendency"
 -i am confused, in her example anova text, her variances do differ significantly, ours do not, what does this mean?? is she saying it doesn't matter bc the largest is still less than 4x?
+-lets review customization of graphs together, make sure everything is there
+- is how i reported anova correct, ie the other pairwise combinations...
