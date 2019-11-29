@@ -1,5 +1,5 @@
 ---
-title: "Pacific giant salamanders (Dicamptodon tenebrosus) in Mack Creek (near Blue River, Oregon): Size and channel location in old growth and previously clear cut forest sections"
+title: "Exploring pacific giant salamanders abundance and weight in relationship to forest and channel type in Mack Creek, Oregon (2003 - 2017)"
 subtitle: "ESM 206 Assignment 5"
 author: "Kaitlyn Lanfield and Ashley Stroud"
 date: "Due: Decemeber 4, 2019"
@@ -41,12 +41,15 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 
 
 
+![](pgs_photo.jpg)
+Figure 1. Pacific giant salamander (Dicamptodon tenebrosus). Photo credit: Gary Nafis: [CaliforniaHerps.com](http://www.californiaherps.com/salamanders/images/dtenebrosusfchu3084.jpg) 
+
 <br>
 
 ### Data and Methods
 
 #### A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
-Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017. While the two salamander populations share a similar trend of incline and decline in counts throughout the years, the counts of salamanders in clear cut forests are generally lower than those inhabiting old growth forests. Interestingly, this trend switched in 2014 (Figure 3.). 
+Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017, rising by 198% and 154% respectively. It is interesting to note that the two salamander populations appear to follow a similar trend of incline and decline in population abundance throughout the years, with the counts of salamanders in clear cut forests typically less than those inhabiting old growth forests. Although in 2014, while both populations  clear cut counts rose above those of old forest, and this continued until the end of the study in 2017 (Figure 3.). 
 
 ```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
 
@@ -117,7 +120,7 @@ chi_test_ps_2017_channel
 
 There is no significant effect of forest type (clear cut/old growth) on where in the channel (cascade/pool/side-channel) pacific salamanders are found. ($\chi$^2^(`r chi_test_ps_2017_channel$parameter`) = `r round(chi_test_ps_2017_channel$statistic,2)`, *p* = `r round(chi_test_ps_2017_channel$p.value, 2)`). The percentage of salamanders found in cascades and side-channels differed by less than 5% between clear cut and old growth forests. Percentages of salamanders found in pools differed slightly more, but still by less than 10%. 
 
-#### Results D. Mean weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. or effects of forest type on salamander weight??
+#### Results D. Mean weights of Pacific giant salamanders by forest type (clear cut and old growth) in 2017. orrrr effects of forest type on salamander weight??
 ```{r}
 colnames(pacific_salamander)
 ps_2017_weight <- pacific_salamander %>% 
@@ -163,17 +166,36 @@ Weights were compared of pacific giant salamanders in old growth forests to thos
 
 
 
-#### Results E. Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
+#### Results E. Mean weights of pacific giant salamander by channel type (pool, cascade, side channel) in 2017. 
 ```{r}
+#visual exploration
+
+#-----------------------weight by channel type 2017 DF-----------------------------------#
 ps_2017_channel_weight <- ps_2017_weight %>% 
   select(year, channel_type, weight) %>% 
   na.omit()
+#--------------------------------------------------------------------------------------# 
 
-#visual exploration
+
+
+#----------------------------exploratory histogram----------------------------------#
 ggplot(ps_2017_channel_weight, aes(x = weight)) +
   geom_histogram(aes(fill = channel_type)) +
-  facet_wrap(~channel_type)
-# here we see positively skewed data, outliers, while means could be used due to CLT, it would not be the most appropriate representation of central tendency 
+  facet_wrap(~channel_type, scales = "free")
+
+# here we see positively skewed data, outliers, while means could be used due to CLT, it would not be the most appropriate representation of central tendency
+#-------------------------------------------------------------------------------# 
+
+
+
+#----------------------------exploratory qq plot----------------------------------#
+ggplot(ps_2017_channel_weight, aes(sample = weight)) +
+  geom_qq() +
+  facet_wrap(~channel_type, scales = "free")
+#
+#-------------------------------------------------------------------------------# 
+
+ 
 
 ```
 
@@ -181,7 +203,7 @@ ggplot(ps_2017_channel_weight, aes(x = weight)) +
 
 
 ```{r}
-# create a summary DF for each of the channel types to be used for plotting  
+# A summary DF for each of the channel types to be used for plotting  
 ps_2017_channel_summary <- ps_2017_channel_weight %>% 
   group_by(channel_type) %>% 
   summarise(
@@ -246,21 +268,30 @@ leveneTest(weight ~ channel_type, data = ps_2017_channel_weight)
 
 #----------------------------ANOVA----------------------------------------------#
 ps_aov <- aov(weight ~ channel_type, data = ps_2017_channel_weight)
-summary(ps_aov)
-# here we see that it is sig, so move forward with tukeys, also need to comment the p value here
+summary(ps_aov) # p = 0.0151, F = 4.216, DF = 2
+# There is a significant difference in groups, so move forward with tukeys post hoc analysis to determine which pairwise combinations are significantly different
 #-------------------------------------------------------------------------------# 
 
 
 #--------------------------Post-hoc analysis------------------------------------# 
 TukeyHSD(ps_aov)
-# only sig is side channel to the pool
+#       pool-cascade, p = 0.286
+# sidechannel-cascade, p = 0.084
+# sidechannel - pool, p = 0.016****
 
+# only significant difference is between the ***side channel and the pool***
 #-------------------------------------------------------------------------------# 
 
 
 #-------------------------ANOVA summary----------------------------------------# 
 ps_aov_outputs <- unlist(summary(ps_aov))
-ps_aov_outputs #This creates a summary of all the outputs from our ANOVA so we can reference it #-------------------------------------------------------------------------------# 
+ps_aov_outputs #This creates a summary of all the outputs from our ANOVA so we can reference it
+
+# The first item [1] is the numerator degrees of freedom; 
+# The second item [2] is the denominator degrees of freedom; 
+# The seventh item [7] is the F-statistic value;
+# The ninth item [9] is the p-value
+#-------------------------------------------------------------------------------# 
 
 ```
 
@@ -287,7 +318,7 @@ side_channel_weight <- ps_2017_channel_weight %>%
 #cascade salamander weights - pool salamander weights
 cascade_pool_ef <- effsize::cohen.d(cascade_weight$weight, pool_weight$weight)
 cascade_pool_ef
-#Effect size is negligible which is not surprising because the difference was insignificant in our Tukey's HSD
+#Effect size is negligible, which is not surprising because the difference was insignificant in our Tukey's HSD
 
 
 #Eside_channel salamander weights -cascade salamander weights
@@ -303,7 +334,7 @@ pool_side_channel_ef
 
 #-------------------------------------------------------------------------------# 
 ```
-
+Mean weights (g) differed significantly only between side channel and pool (one-way ANOVA with post-hoc Tukey's HSD, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`).
 
 
 
@@ -316,3 +347,6 @@ Questions
 -how do we have beeswarm not overlap
 -do we need to write p(0.05) = ??
 -side channel color seems a little light for my eyes
+-not quite sure what to make of qq plot, and a little confused about negative...
+-can we confirm this statement is true, confusing myself with clt "here we see positively skewed data, outliers, while means could be used due to CLT, it would not be the most appropriate representation of central tendency"
+-i am confused, in her example anova text, her variances do differ significantly, ours do not, what does this mean?? is she saying it doesn't matter bc the largest is still less than 4x?
