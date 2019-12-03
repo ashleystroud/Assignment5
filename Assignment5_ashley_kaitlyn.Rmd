@@ -302,10 +302,11 @@ summary(ps_aov) # p = 0.0151, F = 4.216, DF = 2
 
 
 #--------------------------Post-hoc analysis------------------------------------# 
-TukeyHSD(ps_aov)
+ps_tukey <- TukeyHSD(ps_aov)
 #       pool-cascade, p = 0.286
 # sidechannel-cascade, p = 0.084
 # sidechannel - pool, p = 0.016****
+#pstukey$channel_type
 
 # only significant difference is between the ***side channel and the pool***
 #-------------------------------------------------------------------------------# 
@@ -365,9 +366,9 @@ pool_side_channel_ef
 
 <br>
 
-Mean salamander weights (g) differed significantly between side channel and pool only (one-way ANOVA with post-hoc Tukey's HSD, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pairwise combinations.
+A significant difference was detected in mean salamander weights (g) by channel type (one-way ANOVA, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`). A post-hoc analysis was performed using Tukey's HSD and a signifiant difference was detected  between side-channel and pool (*p* = `r round(ps_tukey$channel_type[3,4],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pairwise combinations.
 
-While comparisons of means was used for analysis, it is important to note that this might not be the best method for analysis, as a visual investigation indicates that the data contains many outliers and is heavily skewed (*Figure 4.*). For further investigation, it might be a better option to make comparisons using median values, a measure of central tendency that will not be biased by skew and outliers. 
+While comparisons of means was used for analysis, it is important to note that this might not be the best method for analysis, as a visual investigation indicates that the data contains many outliers and is heavily skewed (Figure 4.). For further investigation, it might be a better option to make comparisons using median values, a measure of central tendency that will not be biased by skew and outliers. 
 
 <br>
 
