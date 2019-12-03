@@ -42,26 +42,30 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 Clear cutting of forests is an ecosystem disturbance that is often seen in logging operations. But how does this type of habitat removal affect the species that live there? The HJ Andrews experimental forest is a long term ecological site that has two sections of forest, a clear cut section (ca. 1963) and a 500 year old coniferous forest, that allows researchers to investigate this question. Here we look at the pacific giant salamander (*Dicamptodon tenebrosus*), an inhabitant of this area, to see if there is any relationship to the type of forest they reside in, to their abundance, weight and channel preference. 
 
 ![](pgs_photo.jpg)
-Figure 1. Pacific giant salamander (Dicamptodon tenebrosus). Photo credit: Gary Nafis: [CaliforniaHerps.com](http://www.californiaherps.com/salamanders/images/dtenebrosusfchu3084.jpg) 
+
+######***Figure 1.*** *Pacific giant salamander(Dicamptodon tenebrosus). Photo credit: Gary Nafis.*
+
+<br>
 
 
 ### Data and Methods
 
-Data on Pacific giant salamanders was collected from 1993 - 2017 in Mack Creek of H.J Andrews Experimental Forest, Oregon. Samples were collected in forests that were subjected to clearcutting in 1963 (clear cut) or in a 500 year old coniferous forest. (old growth). Salamanders were collected via electrofishing and weighed to the nearest 0.01 grams. For more detailed information, refer to the [WEBSITE REFERENCE HERE]. We compared salamander abundances in 2017 between channel types in clear cut and growth forests using a chi-squared test. Mean salamander weights between clear cut and old growth forests were compared with a Welch two-sample t-test (α = 0.05). In addition, we used an ANOVA with post-hoc Tukey HSD to compare mean salamander weights between channel types. All analyses and figures were prepared using R software version 3.6.1.
+Data on Pacific giant salamanders was collected from 1993 - 2017 in Mack Creek of H.J Andrews Experimental Forest, Oregon. Samples were collected in forests that were subjected to clearcutting in 1963 (clear cut) or in a 500 year old coniferous forest. (old growth). Salamanders were collected via electrofishing and weighed to the nearest 0.01 grams. For more detailed information, refer to the [metadata](https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12). We compared salamander abundances in 2017 between channel types in clear cut and growth forests using a chi-squared test. Mean salamander weights between clear cut and old growth forests were compared with a Welch two-sample t-test (α = 0.05). In addition, we used an ANOVA with post-hoc Tukey HSD to compare mean salamander weights between channel types. All analyses and figures were prepared using R software version 3.6.1.
 
 
 
 ![](mack creek.png)
 
-###### ***Figure 1.*** *Map of the H.J Andrews Experimental Forest, Oregon. Location of Mack Creek is shaded in gray.*
+######***Figure 2.*** *Map of the H.J Andrews Experimental Forest, Oregon. Location of Mack Creek is shaded in gray.*  (ADD REFERENCE)
+
+<br>
 
 ### Results
-
 
 #### A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
 Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017, rising by 198% and 154% respectively. It is interesting to note that the two salamander populations appear to follow a similar trend of incline and decline in population abundance throughout the years, with the counts of salamanders in clear cut forests typically less than those inhabiting old growth forests. **Although in 2014, while both populations  clear cut counts rose above those of old forest, and this continued until the end of the study in 2017 (Figure 3.).**???
 
-```{r, fig.cap= "***Figure 2.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
+```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
 
 #H ere we explore pacific salamander abundances between clear cut and old growth forests between 1993 and 2017
 
@@ -88,11 +92,12 @@ years_growth_plot
 
 ```
 
+<br>
 
 #### B: Abundance of Pacific giant salamanders across channel and forest type in 2017
 
 
-```{r, fig.cap = "***Table 1.*** * Counts of pacific salamanders in clear cut and old growth forests across channel types in 2017. Percentages of salamanders found in each channel type (cascade, pool, side-channel) are expressed in relation to the total number of salamanders found in each forest type (clear cut, old growth).*"}
+```{r, include = FALSE}
 
 #Here we explore the abundances of salamanders per channel type and forest type. 
 
@@ -111,7 +116,8 @@ ps_2017_channel_props <- ps_2017_channel_table %>%
   adorn_percentages(denominator = "row") %>% 
   adorn_pct_formatting(digits = 1) %>% #percentages go to one decimal point
   adorn_ns(position = "front") %>% #add the n value before the percent
-  kable(col.names = c("Forest type", "Cascade", "Pool", "Side-channel")) %>% #rename the channel types
+  kable(col.names = c("Forest type", "Cascade", "Pool", "Side-channel"),
+        caption = "***Table 1.*** *Counts of pacific salamanders in clear cut and old growth forests across channel types in 2017. Percentages of salamanders found in each channel type (cascade, pool, side-channel) are expressed in relation to the total number of salamanders found in each forest type (clear cut, old growth).*") %>% #rename the channel types
   kable_styling() %>% 
   add_header_above(c("Channel type " = 4))
 
@@ -134,9 +140,15 @@ chi_test_ps_2017_channel
 
 There is no significant effect of forest type (clear cut/old growth) on where in the channel (cascade/pool/side-channel) pacific salamanders are found. ($\chi$^2^(`r chi_test_ps_2017_channel$parameter`) = `r round(chi_test_ps_2017_channel$statistic,2)`, *p* = `r round(chi_test_ps_2017_channel$p.value, 2)`). The percentage of salamanders found in cascades and side-channels differed by less than 5% between clear cut and old growth forests. Percentages of salamanders found in pools differed slightly more, but still by less than 10%. (*Table 1.*)
 
+```{r}
+ps_2017_channel_props
 
+# running table here to show up after text
+```
 
-#### D. Mean weights of Pacific giant salamanders between forest types in 2017
+<br>
+
+#### C: Mean weights of Pacific giant salamanders between forest types in 2017
 
 ```{r, include = FALSE}
 
@@ -178,12 +190,12 @@ ps_weight_eff
 # there is not a sig diff between mean salamnder weights in 2017 between clear cut and old growth 
 
 ```
-Weights were compared of pacific giant salamanders in old growth forests to those in clear cut forests in 2017 only. There was not a significant difference in weights of salamanders between the two forest types (Welch Two Sample t-test, t = `r round(ps_weight_ttest$statistic,2)`, df = `r round(ps_weight_ttest$parameter,2)`, p = `r round (ps_weight_ttest$p.value,3)`).  
+Weights were compared of pacific giant salamanders in old growth forests to those in clear cut forests in 2017 only. There was not a significant difference in weights of salamanders between the two forest types (Welch Two Sample t-test, t = `r round(ps_weight_ttest$statistic,2)`, df = `r round(ps_weight_ttest$parameter,2)`, p = `r round (ps_weight_ttest$p.value,3)`).  (ADD WHAT IS INTERESTING, DIFF IN MEANS ETC)
 
 
+<br>
 
-
-#### E. Mean weights of pacific giant salamander by channel type in 2017. 
+#### D: Mean weights of pacific giant salamander by channel type in 2017. 
 ```{r, include=FALSE}
 #visual exploration
 
@@ -253,7 +265,7 @@ ps_2017_channel_plot <- ggplot() +
                 width = 0.1)+
   theme(legend.position = "none") +
   theme(axis.title.y = element_blank())+
-  labs(y = "Pacific salamander weight(g)")+
+  labs(y = "Pacific salamander weight (g)")+
   coord_flip()
 
 ps_2017_channel_plot
@@ -350,7 +362,11 @@ pool_side_channel_ef
 ```
 Mean salamander weights (g) differed significantly between side channel and pool only (one-way ANOVA with post-hoc Tukey's HSD, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pairwise combinations. It is important to observe the positive skew for each distribution due to outliers as well as the difference in sample sizes. (*Figure 4.*)
 
-#### Summary
+ADD DISCUSSION CONCERNS
+
+<br>
+
+#### Summary (REFERENCE EACH FIGURE OR SECTION, SEE LOBSTER/DRAGON EX)
 - From 1993 - 2017, Pacific giant salamander abundances between clear cut and old growth forests followed similar trends, but overall were less in clear cut forests. 
 
 - Abundances of salamanders in cascades, pools, and side - channels were not significantly effected by the forest type they were found in (clear cut or old growth). 
@@ -359,8 +375,9 @@ Mean salamander weights (g) differed significantly between side channel and pool
 
 - Average salamander weights differed significantly between side-channels and pools. 
 
+<br>
 
-#### References
+#### References (BOLD OTHERS, SEE DRAGON EX)
 
 Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
 
@@ -369,18 +386,20 @@ Corn, P. S. and Bury, R. B. (1989). ''Logging in Western Oregon: responses of he
 Murphy, M. L. and Hall, J. D. (1981). ''Varied effects of clear cut logging on predators and their habitat in small streams of the Cascade Mountains, Oregon.'' Canadian Journal of Fisheries and Aquatic Science, 38, 137-145.
 
 TO DO:
+
 - Continue annotating
 - Add in section about why using means isn't best measure of central tendency
 - Add in references in reference section and in text
-- Add in picture of salamanders
 - Add in reference for data
 - figure out table caption 
+- review grading rubric to make sure we included everything
 
 
 
 Questions
 
 Ashleys
+
 - how do we have beeswarm not overlap
 - do we need to write p(0.05) = ??
 - side channel color seems a little light for my eyes
