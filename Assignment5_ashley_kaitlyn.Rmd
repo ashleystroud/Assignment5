@@ -302,7 +302,7 @@ summary(ps_aov) # p = 0.0151, F = 4.216, DF = 2
 
 
 #--------------------------Post-hoc analysis------------------------------------# 
-ps_tukey <- TukeyHSD(ps_aov)
+ps_tukey <- TukeyHSD(ps_aov) # make an object so can call for inline referencing
 #       pool-cascade, p = 0.286
 # sidechannel-cascade, p = 0.084
 # sidechannel - pool, p = 0.016****
