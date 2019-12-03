@@ -153,6 +153,7 @@ ps_2017_channel_props
 
 ```{r, include = FALSE}
 
+# Creates a dataframe with only 2017 salamander data with forest type, channel type, and weights
 ps_2017_weight <- pacific_salamander %>% 
   filter(year == "2017") %>% 
   select(year, forest_type, channel_type, weight)
@@ -252,7 +253,7 @@ ps_2017_channel_summary
 
 ```{r, fig.cap= "***Figure 4.*** *Pacific giant salamander weights across channel types (cascade, pool, side-channel). Mean salamander weights per channel type are depicted by black dots with error-bars representing standard error.*"}
 
-
+#Creates a beeswarm plot that shows the data spread and shape to visualize salamander weights across the 3 channel types
 
 ps_2017_channel_plot <- ggplot() +
   geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 1, alpha = 0.6) +
