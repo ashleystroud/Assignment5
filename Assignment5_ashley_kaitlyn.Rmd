@@ -373,6 +373,8 @@ TO DO:
 - Add in section about why using means isn't best measure of central tendency
 - Add in references in reference section and in text
 - Add in picture of salamanders
+- Add in reference for data
+- figure out table caption 
 
 
 
