@@ -73,7 +73,7 @@ pacific_salamander_count <- pacific_salamander %>%
 years_growth_plot <- ggplot(pacific_salamander_count, aes(x = year, y = count)) +
   geom_line(aes(color = forest_type)) +
   geom_point(aes(color = forest_type)) +
-  scale_x_continuous(limits = c(1993, 2017), expand = c(0,0), breaks = seq(0, 2017, 5)) +
+  scale_x_continuous(limits = c(1993, 2017), expand = c(0,0.5), breaks = seq(0, 2017, 5)) +
   scale_y_continuous(limits = c(0, 400), expand = c(0,0), breaks = seq(0, 380, 50)) +
   scale_color_manual(values = c("green", "forestgreen"), labels = c("Clear cut", "Old growth")) +
   labs(x = "Year",
