@@ -39,7 +39,7 @@ pacific_salamander <- mack_creek_vertebrates_og %>%
 
 ### Introduction
 
-When considering take of natural resource management, it is important to consider the effects resource take can have on its associated ecosystem. Studies have shown that clear cutting for logging operations can have both positive and negative impacts on the habitat and the species that live there (Murphy 1981).  The HJ Andrews Experimental Forest is a long term ecological research (lter) site that has two sections of forest, a clear cut section (ca. 1963) and a 500 year old coniferous forest, that allows researchers to investigate this question. Here we look at the Pacific giant salamander (*Dicamptodon tenebrosus*) (Figure 1.), an inhabitant of this area, and a species whose larval stage was shown to be negatively affected by logging (Corn 1989).  Using this lter survey data, we will investigate if there is any relationship to the type of forest Pacific giant salamanders reside in, to their abundance, weight and channel preference.
+When considering take of natural resources, it is important to consider the effects this take can have on its associated ecosystem. Studies have shown that clear cutting for logging operations can have both positive and negative impacts on the habitat and the species that live there, and these impacts can change with time (Murphy 1981).  The HJ Andrews Experimental Forest is a long term ecological research (lter) site located in Oregon that has two sections of forest, a clear cut section (ca. 1963) and a 500 year old coniferous forest, that allows researchers to explore this question over space and time. Here we look at the Pacific giant salamander (*Dicamptodon tenebrosus*) (Figure 1.), an inhabitant of this area, and a species whose larval stage was shown to be negatively affected by logging (Corn 1989).  Using the HJ Andrews Experimental Forest lter survey data, we investigate if there is a relationship to the type of forest (clear cut or old growth) the Pacific giant salamanders reside in, to their abundance, weight and channel preference.
 
 
 ![](pgs_photo.jpg)
@@ -51,7 +51,7 @@ When considering take of natural resource management, it is important to conside
 
 ### Data and Methods
 
-Data on Pacific giant salamanders was collected from 1993 - 2017 in Mack Creek of H.J Andrews Experimental Forest, Oregon (Figure 2.). Samples were collected in forests that were subjected to clearcutting in 1963 (clear cut) or in a 500 year old coniferous forest (old growth). Salamanders were collected via electrofishing in different channels (pools, cascades, or side - channels) and weighed to the nearest 0.01 grams. For more detailed information, refer to the [metadata](https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12).(Gregory S. V. 2016) We compared salamander abundances in 2017 between channel types in clear cut and growth forests using a chi-squared test. Mean salamander weights between clear cut and old growth forests were compared with a Welch two-sample t-test (α = 0.05). In addition, we used an ANOVA with post-hoc Tukey HSD to compare mean salamander weights between channel types. All analyses and figures were prepared using R software version 3.6.1. 
+Data on Pacific giant salamanders was collected from 1993 - 2017 in Mack Creek of H.J Andrews Experimental Forest, Oregon (Figure 2.). Samples were collected in forests that were subjected to clearcutting in 1963 (clear cut) or in a 500 year old coniferous forest (old growth). Salamanders were collected via electrofishing in different channels (pools, cascades, or side - channels) and weighed to the nearest 0.01 grams. For more detailed information, refer to the [metadata](https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12) (Gregory S. V. 2016). We compared salamander abundances in 2017 between channel types in clear cut and growth forests using a chi-squared test. Mean salamander weights between clear cut and old growth forests were compared with a Welch two-sample t-test (α = 0.05). In addition, we used an ANOVA with post-hoc Tukey HSD to compare mean salamander weights between channel types. All analyses and figures were prepared using R software version 3.6.1. 
 
 <br>
 
@@ -64,7 +64,7 @@ Data on Pacific giant salamanders was collected from 1993 - 2017 in Mack Creek o
 ### Results
 
 #### A: Changes in annual salamander abundance in old growth and clear cut sections of Mack Creek.
-Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017, rising by 198% and 154% respectively. It is interesting to note that the two salamander populations appear to follow a similar pattern of incline and decline in population abundance throughout the study. Pacific salamanders in old growth forests generally had higher counts compared to those in clear cut forests, until 2014 (Figure 3.).
+Abundance in pacific salamanders has increased overall in both clear cut and old growth forests from 1993 to 2017, rising by 198% and 154% respectively. The two salamander populations appear to follow a similar pattern of incline and decline in population abundance throughout the study. The salamanders in old growth forests generally had higher counts compared to those in clear cut forests, until 2014 (Figure 3.).
 
 ```{r, fig.cap= "***Figure 3.*** *Annual pacific salamander counts in old growth and clear cut sections of Mack Creek (1993 - 2017).*"}
 
@@ -192,12 +192,12 @@ ps_weight_eff
 # there is not a sig diff between mean salamnder weights in 2017 between clear cut and old growth 
 
 ```
-Weights were compared of pacific giant salamanders in old growth forests to those in clear cut forests in 2017 only. There was not a significant difference in weights of salamanders between the two forest types (Welch Two Sample t-test, t = `r round(ps_weight_ttest$statistic,2)`, df = `r round(ps_weight_ttest$parameter,2)`, p = `r round (ps_weight_ttest$p.value,3)`).  (ADD WHAT IS INTERESTING, DIFF IN MEANS ETC)
+Weights were compared of pacific giant salamanders in old growth forests to those in clear cut forests in 2017 only. There was not a significant difference in weights of salamanders between the two forest types (Welch Two Sample t-test, t = `r round(ps_weight_ttest$statistic,2)`, df = `r round(ps_weight_ttest$parameter,2)`, p = `r round (ps_weight_ttest$p.value,3)`). Mean weights differed by 16.7%, with a negligible effect size (Cohen's d = (`r round(ps_weight_eff$estimate,2)`)).  
 
 
 <br>
 
-#### D: Mean weights of pacific giant salamander by channel type in 2017. 
+#### D: Mean weights of Pacific giant salamander by channel type in 2017. 
 ```{r, include=FALSE}
 #visual exploration
 
@@ -251,7 +251,7 @@ ps_2017_channel_summary
 ```
 
 
-```{r, fig.cap= "***Figure 4.*** *Pacific giant salamander weights across channel types (cascade, pool, side-channel). Mean salamander weights per channel type are depicted by black dots with error-bars representing standard error.*"}
+```{r, fig.cap= "***Figure 4.*** *Pacific giant salamander weights across channel types ( side-channel, pool, cascade). Mean salamander weights per channel type are depicted by black dots with error-bars representing standard error.*"}
 
 #Creates a beeswarm plot that shows the data spread and shape to visualize salamander weights across the 3 channel types
 
