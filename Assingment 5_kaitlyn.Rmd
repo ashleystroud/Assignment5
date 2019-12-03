@@ -127,17 +127,20 @@ ps_2017_channel_summary
 
 ```{r}
 ps_2017_channel_plot <- ggplot() +
-  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 0.8, alpha = 0.6, dodge.width = 0.2) +
-  scale_y_continuous(limits = c(0, 100), expand = c(0,0), breaks = seq(0, 100, 25))+
+  geom_beeswarm(data = ps_2017_channel_weight, aes(x = channel_type, y = weight, color = channel_type), size = 1, alpha = 0.6) +
+  scale_y_continuous(limits = c(0, 105), expand = c(0,0), breaks = seq(0, 100, 25))+
   theme_minimal()+
-  geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight))+
+  geom_point(data = ps_2017_channel_summary, aes(x = channel_type, y = mean_weight), size = 0.8)+
   geom_errorbar(data = ps_2017_channel_summary, aes(x = channel_type,
                                                     ymin = mean_weight - se_weight,
                                                     ymax = mean_weight + se_weight),
                 width = 0.1)+
-  
+  theme(legend.position = "none") +
+  theme(axis.title.y = element_blank())+
+  labs(y = "Pacific salamander weight(g)")+
   coord_flip()
 ps_2017_channel_plot
+
 
 ```
 
