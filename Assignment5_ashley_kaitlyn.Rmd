@@ -244,9 +244,11 @@ ps_2017_channel_summary <- ps_2017_channel_weight %>%
     se_weight = sd(weight)/ sqrt(n()),
     var_weight = var(weight)
     )
-ps_2017_channel_summary
+ps_2017_channel_summary 
 
 #largest variance is 185.58, smallest variance is 68.31, largest is less than 4x, variances are likely close enough
+
+#also used this summary table to get mean percent difference in results D text section
 
 ```
 
@@ -366,9 +368,9 @@ pool_side_channel_ef
 
 <br>
 
-A significant difference was detected in mean salamander weights (g) by channel type (one-way ANOVA, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`). A post-hoc analysis was performed using Tukey's HSD and a signifiant difference was detected  between side-channel and pool (*p* = `r round(ps_tukey$channel_type[3,4],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pairwise combinations.
+A significant difference was detected in mean salamander weights (g) by channel type (one-way ANOVA, F(`r ps_aov_outputs[1]`, `r ps_aov_outputs[2]`) = `r round(ps_aov_outputs[7],2)`, *p* = `r round(ps_aov_outputs[9],3)`). A post-hoc analysis was performed using Tukey's HSD and a signifiant difference was detected  between side-channel and pool (*p* = `r round(ps_tukey$channel_type[3,4],3)`), differing by around 48% with a small effect size (Cohen's d = (`r round(pool_side_channel_ef$estimate,2)`)). There was not a significant difference detected between the other pariwise combinations. Cascade and side-channels had a mean difference of 27.8% (*p* = `r round(ps_tukey$channel_type[2,4],3)`) with a small effect size (Cohen's d = (`r round(cascade_side_channel_ef$estimate,2)`)), while cascade and pool had a mean difference of 21.1% (*p* = `r round(ps_tukey$channel_type[1,4],3)`) and a small effect size (Cohen's d = (`r round(cascade_pool_ef$estimate,2)`)).
 
-While comparisons of means was used for analysis, it is important to note that this might not be the best method for analysis, as a visual investigation indicates that the data contains many outliers and is heavily skewed (Figure 4.). For further investigation, it might be a better option to make comparisons using median values, a measure of central tendency that will not be biased by skew and outliers. 
+While comparisons of means was used for this analysis, it is important to note that this might not be the best method for analysis, as a visual investigation indicates that this data contains many outliers and is heavily skewed (Figure 4.). For further investigation, it might be a better option to make comparisons using median values, a measure of central tendency that will not be biased by skew and outliers. 
 
 <br>
 
@@ -385,20 +387,14 @@ While comparisons of means was used for analysis, it is important to note that t
 
 #### References 
 
-**Corn, P. S. and Bury, R. B. (1989).** ''Logging in Western Oregon: responses of headwater habitats and stream amphibians.'' Forest Ecology and Management, 29, 39-57.
+**Corn, P. S. and Bury, R. B. (1989).** Logging in Western Oregon: responses of headwater habitats and stream amphibians. Forest Ecology and Management, 29, 39-57.
 
 **Gregory S. V. (2016).** Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/19/2019.
 
 **Mosquera, G. M., Segura, C., & Crespo, P. (2018).** Flow partitioning modelling using high-resolution isotopic and electrical conductivity data. Water (Switzerland), 10(7), 1–23. https://doi.org/10.3390/w10070904
 
-**Murphy, M. L. and Hall, J. D. (1981).** ''Varied effects of clear cut logging on predators and their habitat in small streams of the Cascade Mountains, Oregon.'' Canadian Journal of Fisheries and Aquatic Science, 38, 137-145.
+**Murphy, M. L. and Hall, J. D. (1981).** Varied effects of clear cut logging on predators and their habitat in small streams of the Cascade Mountains, Oregon. Canadian Journal of Fisheries and Aquatic Science, 38, 137-145.
 
 
-
-
-TO DO:
-
-- Continue annotating
-- review grading rubric to make sure we included everything
 
 
